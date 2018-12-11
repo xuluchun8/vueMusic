@@ -69,16 +69,17 @@
     methods: {
       _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
+
         let width = 0
         let sliderWidth = this.$refs.slider.clientWidth
         for (let i = 0; i < this.children.length; i++) {
           let child = this.children[i]
           addClass(child, 'slider-item')
+
           child.style.width = sliderWidth + 'px'
           width += sliderWidth
         }
         if (this.loop && !isResize) {
-          // 不能正常轮播的bug
           width += 2 * sliderWidth
         }
         this.$refs.sliderGroup.style.width = width + 'px'
@@ -91,8 +92,7 @@
           snap: true,
           snapLoop: this.loop,
           snapThreshold: 0.3,
-          snapSpeed: 400,
-          click: true
+          snapSpeed: 400
         })
 
         this.slider.on('scrollEnd', () => {
@@ -134,13 +134,14 @@
   @import "~common/stylus/variable"
 
   .slider
-    min-height: 1px
+    // min-height: 1px
     .slider-group
       position: relative
       overflow: hidden
-      white-space: nowrap
+      // white-space: nowrap
       .slider-item
-        float: left
+        // float: left
+        display inline-block
         box-sizing: border-box
         overflow: hidden
         text-align: center
