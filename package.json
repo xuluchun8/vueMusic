@@ -11,10 +11,14 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "better-scroll": "^1.6.0",
+    "fastclick": "^1.0.6",
+    "jsonp": "^0.2.1",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1"
   },
   "devDependencies": {
+    "babel-polyfill": "^6.22.0",
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
