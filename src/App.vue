@@ -2,6 +2,7 @@
   <div id="app">
     <m-header></m-header>
     <tab></tab>
+    <!-- ‘保持状态’ -->
     <keep-alive>
       <router-view></router-view>
     </keep-alive>

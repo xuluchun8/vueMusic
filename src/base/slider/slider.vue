@@ -41,7 +41,7 @@
         this._setSliderWidth()
         this._initDots()
         this._initSlider()
-
+        
         if (this.autoPlay) {
           this._play()
         }
@@ -63,6 +63,7 @@
     deactivated() {
       clearTimeout(this.timer)
     },
+    // 组件销毁是主动清楚timer
     beforeDestroy() {
       clearTimeout(this.timer)
     },
@@ -79,7 +80,7 @@
         }
         if (this.loop && !isResize) {
           // 不能正常轮播的bug
-          width += 2 * sliderWidth
+          // width += 2 * sliderWidth
         }
         this.$refs.sliderGroup.style.width = width + 'px'
       },
@@ -92,13 +93,13 @@
           snapLoop: this.loop,
           snapThreshold: 0.3,
           snapSpeed: 400,
-          click: true
+          // 阻止默认事件
+          // click: true
         })
 
         this.slider.on('scrollEnd', () => {
           let pageIndex = this.slider.getCurrentPage().pageX
           if (this.loop) {
-            console.log(pageIndex)
             pageIndex -= 1
           }
           this.currentPageIndex = pageIndex
@@ -134,6 +135,7 @@
   @import "~common/stylus/variable"
 
   .slider
+    position relative
     min-height: 1px
     .slider-group
       position: relative
