@@ -1,15 +1,17 @@
 <template>
   <div class="singer">
-    <listview :data="normalizSingerList"></listview>
+    <listview :data="normalizSingerList" ></listview>
   </div>
 </template>
 
 <style lang="stylus" scoped>
-  // .singer
-  //   position fixed
-  //   top 88px 
-  //   bottom 0
-  //   width 100%
+@import '~common/stylus/variable'
+.singer
+  position fixed
+  top 88px 
+  bottom 0
+  width 100%
+
 </style>
 
 <script>
@@ -22,7 +24,7 @@ const HOT_NAME = "热门";
 const HOT_SINGER_LEN = 10;
 
 export default {
-  components:{
+  components: {
     Listview
   },
   data() {

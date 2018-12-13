@@ -1,8 +1,8 @@
 <template>
   <div class="listview">
-    <scroll :data="data" class="singer-wrapper">
-      <ul class="singer_group_list">
-        <li class="singer_group" v-for="(group,index) in data" :key="index">
+    <scroll :data="data" class="singer-wrapper" ref="listview">
+      <ul class="singer_group_list" >
+        <li class="singer_group" ref="listGroup" v-for="(group,index) in data" :key="index">
           <h2 class="singer_group_title">{{group.title}}</h2>
           <ul class="singer_list">
             <li class="singer" v-for="(item,index) in group.items" :key="index">
@@ -14,12 +14,20 @@
           </ul>
         </li>
       </ul>
+      <div class="shortcut_wrapper">
+        <ul>
+          <li :class="{'active' : index === currentIndex }" class="shortcut" @touchmove="onShortcutTouchMove" @touchstart="onShortcutTouchStart" :data-index="index" :key="index" v-for="(item,index) in shortcutList">
+            {{item}}
+          </li>
+        </ul>
+      </div>
     </scroll>
   </div>
 </template>
 
 <script>
 import Scroll from 'base/scroll/scroll';
+const ANCHOR_HEIGTH = 18
 export default {
   name:'listview',
   props: {
@@ -29,7 +37,40 @@ export default {
     }
   },
   components:{
-    scroll : Scroll
+    Scroll
+  },
+  computed: {
+    shortcutList(){
+      return this.data.map((item) => {
+        return item.title.substr(0,1)
+      })
+    },
+    currentIndex(){
+      return this.touch.anchorIndex
+    }
+  },
+  created() {
+    // touch无需放在data 或者 props中
+    this.touch = {}
+  },
+  methods: {
+    onShortcutTouchStart(e){
+      let anchorIndex = e.target.dataset.index
+      let firstTouch = e.touches[0]
+      this.touch.y1 = firstTouch.pageY
+      this.touch.anchorIndex = anchorIndex
+      this._scrollTo(anchorIndex)
+    },
+    onShortcutTouchMove(e){
+      let firstTouch = e.touches[0]
+      this.touch.y2 = firstTouch.pageY
+      let delta = (this.touch.y2 - this.touch.y1)/ANCHOR_HEIGTH | 0
+      let anchorIndex = this.touch.anchorIndex | 0 + delta
+      this._scrollTo(anchorIndex)
+    },
+    _scrollTo(index) {
+        this.$refs.listview.scrollToElement(this.$refs.listGroup[index],400)
+      }
   }
 };
 </script>
@@ -39,9 +80,25 @@ export default {
 .singer-wrapper{
   position fixed
   top 88px
+  right 0
+  left 0
   bottom 0
   overflow hidden
 }
+.shortcut_wrapper
+  background-color $color-background-d
+  position absolute
+  padding 20px 0
+  border-radius 20px
+  right 0
+  top 20px
+  text-align center
+  .shortcut
+    padding 3px
+    font-size 8px
+    color $color-text-l
+  .active
+    color $color-theme
 .singer_group_list
   width 100%
   .singer_group
@@ -53,11 +110,13 @@ export default {
       padding-left 15px
       color $color-text-l
     .singer_list
+      &:last-child
+        padding-bottom 20px
       .singer
         padding 20px 0 0 10px
         display flex
         align-items center
-        // flex-direction 
+ 
         .singer_img_wrapper
           padding 0 20px
           .singer_img
