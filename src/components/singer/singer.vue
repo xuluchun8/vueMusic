@@ -1,7 +1,9 @@
 <template>
   <div class="singer">
-    <listview :data="normalizSingerList" ></listview>
+    <listview @gotoSingerDetail="gotoSingerDetail" :data="normalizSingerList" ></listview>
+    <router-view></router-view>
   </div>
+  
 </template>
 
 <style lang="stylus" scoped>
@@ -37,6 +39,9 @@ export default {
     this._getSingerList();
   },
   methods: {
+    gotoSingerDetail(singer){
+      this.$router.push({ path: `/singer/${singer.id}`})
+    },
     _getSingerList() {
       getSingerList().then(res => {
         if (ERR_OK === res.code) {

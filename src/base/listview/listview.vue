@@ -12,7 +12,7 @@
         <li class="singer_group" ref="listGroup" v-for="(group,index) in data" :key="index">
           <h2 class="singer_group_title">{{group.title}}</h2>
           <ul class="singer_list">
-            <li class="singer" v-for="(item,index) in group.items" :key="index">
+            <li class="singer"  @click="selectItem(item)" v-for="(item,index) in group.items" :key="index">
               <div class="singer_img_wrapper">
                 <img class="singer_img" width="50px" height="50px" v-lazy="item.avatar">
               </div>
@@ -94,10 +94,7 @@ export default {
     },
     diff(val) {
       let fixedTop = val > 0 && val < TITLE_HEIGHT ? TITLE_HEIGHT - val : 0;
-      // if(val < 30){
-      //   console.log(val)
       this.$refs.fixedTitle.style.transform = `translate3d(0,${-fixedTop}px,0)`;
-      // }
     },
     scrollY(newY) {
       let currentHeight = newY;
@@ -139,6 +136,9 @@ export default {
       let anchorIndex = parseInt(this.touch.anchorIndex) + delta;
 
       this._scrollTo(anchorIndex);
+    },
+    selectItem(item){
+      this.$emit('gotoSingerDetail',item)
     },
     _scrollTo(index) {
       if (!index && index !== 0) {
