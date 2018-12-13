@@ -35,7 +35,7 @@
           >{{item}}</li>
         </ul>
       </div>
-    </scroll>8
+    </scroll>
   </div>
 </template>
 
