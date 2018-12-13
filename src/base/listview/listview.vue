@@ -1,6 +1,6 @@
 <template>
   <div class="listview">
-    <scroll :data="data" class="singer-wrapper" ref="listview">
+    <scroll :listenScroll="listenScroll" :data="data" @scroll="onlistenScroll" class="singer-wrapper" ref="listview">
       <ul class="singer_group_list" >
         <li class="singer_group" ref="listGroup" v-for="(group,index) in data" :key="index">
           <h2 class="singer_group_title">{{group.title}}</h2>
@@ -30,6 +30,11 @@ import Scroll from 'base/scroll/scroll';
 const ANCHOR_HEIGTH = 18
 export default {
   name:'listview',
+  data(){
+    return {
+      listenScroll : true
+    }
+  },
   props: {
     data:{
       type: Array,
@@ -49,8 +54,12 @@ export default {
   created() {
     // touch无需放在data 或者 props中
     this.touch = {}
+    
   },
   methods: {
+    onlistenScroll(pos){
+      console.log(pos);
+    },
     onShortcutTouchStart(e){
       let anchorIndex = e.target.dataset.index
       let firstTouch = e.touches[0]
