@@ -67,18 +67,14 @@ export default {
       let firstTouch = e.touches[0]
       this.touch.y1 = firstTouch.pageY
       this.touch.anchorIndex = anchorIndex
-      
       this._scrollTo(anchorIndex)
     },
     onShortcutTouchMove(e){
       let firstTouch = e.touches[0]
       this.touch.y2 = firstTouch.pageY
       let delta = (this.touch.y2 - this.touch.y1)/ANCHOR_HEIGTH | 0
-      console.log(delta,anchorIndex)
-      let anchorIndex = this.touch.anchorIndex | 0 + delta
+      let anchorIndex = parseInt(this.touch.anchorIndex) + delta
       this.currentIndex = anchorIndex 
-      // console.log(this.currentIndex);
-      
       this._scrollTo(anchorIndex)
     },
     _scrollTo(index) {
