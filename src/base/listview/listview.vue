@@ -1,6 +1,10 @@
 <template>
   <div class="listview">
-    <scroll :listenScroll="listenScroll" :data="data" @scroll="onlistenScroll" class="singer-wrapper" ref="listview">
+    <scroll :probeType="probeType" 
+            :listenScroll="listenScroll" 
+            :data="data" @scroll="onlistenScroll" 
+            class="singer-wrapper" 
+            ref="listview">
       <ul class="singer_group_list" >
         <li class="singer_group" ref="listGroup" v-for="(group,index) in data" :key="index">
           <h2 class="singer_group_title">{{group.title}}</h2>
@@ -16,7 +20,8 @@
       </ul>
       <div class="shortcut_wrapper">
         <ul>
-          <li class="shortcut" @touchmove="onShortcutTouchMove" @touchstart="onShortcutTouchStart" :data-index="index" :key="index" v-for="(item,index) in shortcutList">
+          <li class="shortcut"  @touchmove="onShortcutTouchMove" @touchstart="onShortcutTouchStart" :class="{'current': currentIndex === index}"
+           :data-index="index" :key="index" v-for="(item,index) in shortcutList">
             {{item}}
           </li>
         </ul>
@@ -27,18 +32,20 @@
 
 <script>
 import Scroll from 'base/scroll/scroll';
+import { setTimeout } from 'timers';
 const ANCHOR_HEIGTH = 18
 export default {
   name:'listview',
-  data(){
-    return {
-      listenScroll : true
-    }
-  },
   props: {
     data:{
       type: Array,
       default: []
+    }
+  },
+  data(){
+    return {
+      scrollY: -1,
+      currentIndex: 0,
     }
   },
   components:{
@@ -54,14 +61,43 @@ export default {
   created() {
     // touch无需放在data 或者 props中
     this.touch = {}
-    
+    this.listenScroll = true
+    this.probeType = 3
+    this.listHeight = []
+  },
+  watch: {
+    // 只有监听到数据的变话才知道height更新了
+    data(){
+      setTimeout(() => {
+        this._calculateHeight()
+      },20)
+    },
+    scrollY(newY){
+      let currentHeight = newY 
+      if(currentHeight > 0){
+        this.currentIndex = 0
+        return
+      }
+      let listHeight = this.listHeight
+      for(let i = 0; i < listHeight.length; i++){
+        let heightTop = listHeight[i]
+        let heigthBottom = listHeight[i+1]
+        if(currentHeight > -heigthBottom && currentHeight <= -heightTop){
+          this.currentIndex = i
+          return
+        }
+      }
+      // 当滚动到底部，且-newY大于最后一个元素的上限
+      this.currentIndex = listHeight.length - 2
+    }
   },
   methods: {
-    onlistenScroll(pos){
-      console.log(pos);
+    onlistenScroll(pos){  
+      this.scrollY = pos.y
     },
     onShortcutTouchStart(e){
       let anchorIndex = e.target.dataset.index
+      this.currentIndex = parseInt(anchorIndex) 
       let firstTouch = e.touches[0]
       this.touch.y1 = firstTouch.pageY
       this.touch.anchorIndex = anchorIndex
@@ -71,12 +107,37 @@ export default {
       let firstTouch = e.touches[0]
       this.touch.y2 = firstTouch.pageY
       let delta = (this.touch.y2 - this.touch.y1)/ANCHOR_HEIGTH | 0
-      let anchorIndex = this.touch.anchorIndex | 0 + delta
+      let anchorIndex = parseInt(this.touch.anchorIndex) + delta
+      
       this._scrollTo(anchorIndex)
     },
     _scrollTo(index) {
-        this.$refs.listview.scrollToElement(this.$refs.listGroup[index],300)
+      if(!index && index !== 0){
+        // 不满足条件就return 可以节约性能
+        return
       }
+      if(index < 0) {
+        index = 0
+      }
+      if(index > this.listHeight.length - 2){
+         console.log(index,this.listHeight.length);
+        index = this.listHeight.length - 2
+      }
+      this.currentIndex = index
+      this.$refs.listview.scrollToElement(this.$refs.listGroup[index],0)
+    },
+    _calculateHeight(){
+      let listHeight = []
+      listHeight[0] = 0
+      let height = 0
+      const list = this.$refs.listGroup
+      for (let i = 0; i < list.length; i++){
+        let itemHeight = list[i].clientHeight
+        height += itemHeight
+        listHeight.push(height)
+      }
+      this.listHeight = listHeight
+    }
   }
 };
 </script>
@@ -103,6 +164,8 @@ export default {
     padding 3px
     font-size 8px
     color $color-text-l
+  .current
+    color $color-theme
 .singer_group_list
   width 100%
   .singer_group
