@@ -35,7 +35,7 @@
           >{{item}}</li>
         </ul>
       </div>
-    </scroll>
+    </scroll>8
   </div>
 </template>
 
@@ -148,8 +148,8 @@ export default {
       if (index < 0) {
         index = 0;
       }
-      if (index > this.listHeight.length - 2) {
-        index = this.listHeight.length - 2;
+      if(index > this.listHeight.length - 2){
+        index = this.listHeight.length - 2
       }
       this.currentIndex = index;
       this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0);
