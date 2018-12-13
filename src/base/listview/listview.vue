@@ -26,7 +26,7 @@
           </li>
         </ul>
       </div>
-    </scroll>
+    </scroll>8
   </div>
 </template>
 
@@ -120,7 +120,6 @@ export default {
         index = 0
       }
       if(index > this.listHeight.length - 2){
-         console.log(index,this.listHeight.length);
         index = this.listHeight.length - 2
       }
       this.currentIndex = index
