@@ -58,7 +58,11 @@ export default {
   },
   methods: {
     onShortcutTouchStart(e){
-      this.touch = {}
+      if(this.touch.firstTouch){
+        this.touch = {
+          firstTouch : this.touch.firstTouch
+        }
+      }
       let anchorIndex = e.target.dataset.index
       let firstTouch = e.touches[0]
       this.touch.y1 = firstTouch.pageY
@@ -70,10 +74,11 @@ export default {
       let firstTouch = e.touches[0]
       this.touch.y2 = firstTouch.pageY
       let delta = (this.touch.y2 - this.touch.y1)/ANCHOR_HEIGTH | 0
-      console.log((this.touch.y2 | 0),(this.touch.y1 | 0))
+      console.log(delta,anchorIndex)
       let anchorIndex = this.touch.anchorIndex | 0 + delta
+      this.currentIndex = anchorIndex 
+      // console.log(this.currentIndex);
       
-      // console.log(this.currentIndex)
       this._scrollTo(anchorIndex)
     },
     _scrollTo(index) {
