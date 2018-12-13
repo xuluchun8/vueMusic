@@ -16,7 +16,7 @@
       </ul>
       <div class="shortcut_wrapper">
         <ul>
-          <li :class="{'active' : index === currentIndex }" class="shortcut" @touchmove="onShortcutTouchMove" @touchstart="onShortcutTouchStart" :data-index="index" :key="index" v-for="(item,index) in shortcutList">
+          <li class="shortcut" @touchmove="onShortcutTouchMove" @touchstart="onShortcutTouchStart" :data-index="index" :key="index" v-for="(item,index) in shortcutList">
             {{item}}
           </li>
         </ul>
@@ -44,9 +44,6 @@ export default {
       return this.data.map((item) => {
         return item.title.substr(0,1)
       })
-    },
-    currentIndex(){
-      return this.touch.anchorIndex
     }
   },
   created() {
@@ -69,7 +66,7 @@ export default {
       this._scrollTo(anchorIndex)
     },
     _scrollTo(index) {
-        this.$refs.listview.scrollToElement(this.$refs.listGroup[index],400)
+        this.$refs.listview.scrollToElement(this.$refs.listGroup[index],300)
       }
   }
 };
@@ -97,8 +94,6 @@ export default {
     padding 3px
     font-size 8px
     color $color-text-l
-  .active
-    color $color-theme
 .singer_group_list
   width 100%
   .singer_group
