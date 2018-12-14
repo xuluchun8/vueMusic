@@ -3,6 +3,14 @@
     <slot></slot>
   </div>
 </template>
+<style lang="stylus" scoped>
+.wrapper{
+  // overflow hidden
+  position absolute
+  bottom 0px  
+  width 100%
+}
+</style>
 
 <script type="text/ecmascript-6">
 import Bscroll from "better-scroll";

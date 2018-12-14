@@ -25,7 +25,7 @@
       width 30px
       height 30px
     .loading-text
-      color $color-text
+      color $color-text-l
       font-size $font-size-small
       padding-top 10px
 </style>
