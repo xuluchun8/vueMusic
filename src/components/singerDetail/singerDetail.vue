@@ -5,6 +5,17 @@
 </template>
 
 <script>
+import { mapGetters, mapState } from "vuex";
+export default {
+  created() {
+    let data = this.$store.state.singer
+    console.log(data);
+    mapGetters(["singer"])
+  },
+  computed: {
+    ...mapGetters(["singer"])
+  }
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -18,9 +29,12 @@
   left: 0;
   background-color: $color-background;
 }
-.slide-enter-active, .slide-leave-active
-  transition: all 0.3s
 
-.slide-enter, .slide-leave-to
-  transform: translate3d(100%, 0, 0)
+.slide-enter-active, .slide-leave-active {
+  transition: all 0.3s;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate3d(100%, 0, 0);
+}
 </style>

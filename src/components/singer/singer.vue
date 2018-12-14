@@ -40,6 +40,7 @@ export default {
   },
   methods: {
     gotoSingerDetail(singer){
+      this._setSinger(singer)
       this.$router.push({ path: `/singer/${singer.id}`})
     },
     _getSingerList() {
@@ -49,6 +50,9 @@ export default {
           this.normalizSingerList = this._normalizeSinger(this.singerList);
         }
       });
+    },
+    _setSinger(singer){
+      this.$store.commit('SET_SINGER',singer)
     },
     // 标准化singer数据
     _normalizeSinger(list) {
