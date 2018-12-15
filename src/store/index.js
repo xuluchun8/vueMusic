@@ -4,6 +4,7 @@ import * as actions from './actions'
 import * as getters from './getters'
 import state from './state'
 import mutations from './mutations'
+// 打印日志的插件
 import createLogger from 'vuex/dist/logger'
 
 Vue.use(Vuex)

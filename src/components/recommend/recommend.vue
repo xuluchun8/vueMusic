@@ -65,7 +65,6 @@ export default {
       getRecommend().then(res => {
         if (res.code === ERR_OK) {
           this.recommends = res.data.slider;
-          console.log(res.data.slider);
         }
       });
     }

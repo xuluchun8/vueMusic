@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="bg_layer" ref="bgLayer"></div>
-    
+
     <scroll
       @scroll="scroll"
       :probeType="probeType"
@@ -23,11 +23,11 @@
       ref="list"
     >
       <div class="song_list_wrapper">
-        <song-list :songs="songs"></song-list>
+        <song-list @select="selectItem" :songs="songs"></song-list>
       </div>
       <div class="loading-container" v-show="!songs.length">
-      <loading></loading>
-    </div>
+        <loading></loading>
+      </div>
     </scroll>
   </div>
 </template>
@@ -37,6 +37,7 @@ import Scroll from "base/scroll/scroll";
 import SongList from "base/song-list/song-list";
 import Loading from "base/loading/loading";
 import { prefixStyle } from "common/js/dom";
+import { mapActions, mapGetters } from "vuex";
 
 const transform = prefixStyle("transform");
 const LAYER_MIN_TOP = 40;
@@ -82,11 +83,6 @@ export default {
       }
     }
   },
-  // watch: {
-  //   scrollY(newVal){
-  //     console.log(newVal);
-  //   }
-  // },
   methods: {
     scroll(pos) {
       let layerTop =
@@ -114,7 +110,14 @@ export default {
     },
     backToSinger() {
       this.$router.push("/singer");
-    }
+    },
+    selectItem(item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      });
+    },
+    ...mapActions(["selectPlay"])
   },
   components: {
     Scroll,
