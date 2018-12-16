@@ -13,6 +13,7 @@ var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
 var axios = require('axios')
+const bodyParser = require('body-parser')
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 // automatically open browser, if not set will be false
@@ -24,6 +25,7 @@ var proxyTable = config.dev.proxyTable
 // 服务器代理
 var app = express()
 var apiRoutes = express.Router()
+app.use(bodyParser.urlencoded({extended: true}))
 apiRoutes.get('/getDiscList', function (req, res) {
   var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
   axios.get(url, {
@@ -38,7 +40,25 @@ apiRoutes.get('/getDiscList', function (req, res) {
     console.log(e)
   })
 })
+
+
+app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
+  const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
+  axios.post(url, req.body, {
+    headers: {
+      referer: 'https://y.qq.com/',
+      origin: 'https://y.qq.com',
+      'Content-type': 'application/x-www-form-urlencoded'
+    }
+  }).then((response) => {
+    res.json(response.data)
+  }).catch((e) => {
+    console.log(e)
+  })
+})
 app.use('/api', apiRoutes)
+
+
 
 var compiler = webpack(webpackConfig)
 

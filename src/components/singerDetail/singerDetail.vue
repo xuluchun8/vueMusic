@@ -6,9 +6,9 @@
 
 <script>
 import { mapGetters, mapState } from "vuex";
-import { getSingerDetail } from "@/api/singer";
+import { getSingerDetail } from '@/api/singer'
+import { createSong, isValidMusic, processSongsUrl } from "common/js/song";
 import { ERR_OK } from "@/api/config";
-import createSong from "common/js/song";
 import MusicList from "components/music-list/music-list";
 export default {
   created() {
@@ -30,7 +30,9 @@ export default {
       }
       getSingerDetail(id).then(res => {
         if (res.code === ERR_OK) {
-          this.songs = this._normalizeSingerDetail(res.data.list);
+          processSongsUrl(this._normalizeSingerDetail(res.data.list)).then(songs => {
+            this.songs = songs
+          })
         }
       });
     },
@@ -38,9 +40,9 @@ export default {
       let ret = [];
       list.forEach(item => {
         let { musicData } = item;
-        if (musicData.songid && musicData.albummid) {
-          ret.push(createSong(musicData));
-        }
+        if (isValidMusic(musicData)) {
+            ret.push(createSong(musicData))
+          }
       });
       return ret;
     }
