@@ -6,7 +6,7 @@
     <h1 class="title">{{title}}</h1>
     <div class="singer_bg" :style="bgStyle" ref="singerBg">
       <div class="pup"></div>
-      <div class="playBtn-wrapper" v-show="hidePlayBtn && songs.length">
+      <div class="playBtn-wrapper" @click="startRandomPlay" v-show="hidePlayBtn && songs.length">
         <div class="playBtn" ref="playBtn">
           <i class="icon-play"></i>
           <span class="play_text">随机播放全部</span>
@@ -38,6 +38,7 @@ import SongList from "base/song-list/song-list";
 import Loading from "base/loading/loading";
 import { prefixStyle } from "common/js/dom";
 import { mapActions, mapGetters } from "vuex";
+import playlistMixin from 'common/js/mixin'
 
 const transform = prefixStyle("transform");
 const LAYER_MIN_TOP = 40;
@@ -67,6 +68,7 @@ export default {
       default: ""
     }
   },
+  mixins:[playlistMixin], 
   mounted() {
     this.imageHeight = this.$refs.singerBg.clientHeight;
     // 对scroll组件的根dom元素进行操作
@@ -84,6 +86,18 @@ export default {
     }
   },
   methods: {
+    handlePlaylist(playlist){
+       const bottom = playlist.length > 0 ? '60px' : ''
+       this.$refs.list.$el.style.bottom = bottom
+       this.$refs.list.refresh()
+    },
+    startRandomPlay(){
+      console.log(this.randomPlay);
+      this.$store.dispatch('randomPlay',{songs :this.songs})
+      //  this.randomPlay({
+      //    songs:this.songs
+      //  })
+    },
     scroll(pos) {
       let layerTop =
         this.imageHeight + pos.y > LAYER_MIN_TOP
@@ -112,12 +126,13 @@ export default {
       this.$router.push("/singer");
     },
     selectItem(item, index) {
+
       this.selectPlay({
         list: this.songs,
         index
       });
     },
-    ...mapActions(["selectPlay"])
+    ...mapActions(["selectPlay"],['randomPlay'])
   },
   components: {
     Scroll,

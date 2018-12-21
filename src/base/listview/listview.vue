@@ -8,7 +8,7 @@
       class="singer-wrapper"
       ref="listview"
     >
-      <ul class="singer_group_list">
+      <ul  class="singer_group_list">
         <li class="singer_group" ref="listGroup" v-for="(group,index) in data" :key="index">
           <h2 class="singer_group_title">{{group.title}}</h2>
           <ul class="singer_list">
@@ -41,7 +41,9 @@
 
 <script>
 import Scroll from "base/scroll/scroll";
+import {mapGetters} from 'vuex'
 import { setTimeout } from "timers";
+
 const ANCHOR_HEIGTH = 18;
 const TITLE_HEIGHT = 30;
 export default {
@@ -85,6 +87,7 @@ export default {
     this.probeType = 3;
     this.listHeight = [];
   },
+
   watch: {
     // 只有监听到数据的变话才知道height更新了
     data() {
@@ -121,6 +124,9 @@ export default {
     onlistenScroll(pos) {
       this.scrollY = pos.y;
     },
+    refresh(){
+      this.$refs.listview.refresh()
+    },
     onShortcutTouchStart(e) {
       let anchorIndex = e.target.dataset.index;
       this.currentIndex = parseInt(anchorIndex);
@@ -138,6 +144,8 @@ export default {
       this._scrollTo(anchorIndex);
     },
     selectItem(item){
+      console.log(item);
+      
       this.$emit('gotoSingerDetail',item)
     },
     _scrollTo(index) {
