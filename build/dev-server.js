@@ -42,6 +42,8 @@ apiRoutes.get('/getDiscList', function (req, res) {
   })
 })
 app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
+  console.log(res);
+  
   const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg'
   axios.post(url, req.body, {
     headers: {
@@ -50,6 +52,8 @@ app.post('/api/getPurlUrl', bodyParser.json(), function (req, res) {
       'Content-type': 'application/x-www-form-urlencoded'
     }
   }).then((response) => {
+    console.log(response);
+    
     res.json(response.data)
   }).catch((e) => {
     console.log(e)
@@ -139,7 +143,7 @@ devMiddleware.waitUntilValid(() => {
   _resolve()
 })
 
-var server = app.listen(8085)
+var server = app.listen(port)
 
 module.exports = {
   ready: readyPromise,
